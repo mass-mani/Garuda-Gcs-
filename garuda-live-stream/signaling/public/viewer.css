@@ -1,0 +1,76 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0b1118;
+  color: #f4f7fa;
+  --muted: #91a4b5;
+  --green: #57d9a3;
+  --panel: #141d27;
+  --border: #263443;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: radial-gradient(ellipse at 50% -20%, #18362f 0, #0b1118 48rem); }
+.shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 28px 0 30px; }
+.topbar, .brand, .intro, .viewer-count, .video-meta, footer { display: flex; align-items: center; }
+.topbar, .intro { justify-content: space-between; }
+.brand { gap: 11px; color: inherit; text-decoration: none; }
+.brand-mark { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid #397860; border-radius: 13px; color: var(--green); font-size: 21px; font-weight: 800; background: #10241f; }
+.brand strong, .brand small { display: block; letter-spacing: .12em; }
+.brand strong { font-size: 12px; }
+.brand small { margin-top: 3px; color: var(--muted); font-size: 9px; }
+.pill { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 999px; padding: 9px 13px; font-size: 11px; font-weight: 750; letter-spacing: .09em; }
+.pill.live { color: var(--green); background: #10251f; border-color: #28543f; }
+.pill.waiting { color: #f3bb67; background: #231d14; border-color: #554328; }
+.dot { width: 7px; height: 7px; flex: none; display: inline-block; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px currentColor; }
+.waiting .dot { background: #f3bb67; }
+.intro { padding: 39px 2px 21px; }
+.eyebrow { margin: 0 0 8px; color: var(--green); font-size: 10px; font-weight: 800; letter-spacing: .15em; }
+h1 { margin: 0; font-size: clamp(30px, 5vw, 43px); line-height: 1.05; letter-spacing: -.04em; }
+.subhead { margin: 9px 0 0; color: var(--muted); font-size: 14px; }
+.viewer-count { gap: 7px; color: var(--muted); font-size: 12px; }
+.viewer-count #viewer-count { color: white; font-weight: 750; }
+.count-icon { color: var(--green); font-size: 18px; }
+.video-card { overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: var(--panel); box-shadow: 0 18px 55px #0005; }
+.video-wrap { position: relative; display: grid; place-items: center; min-height: 220px; aspect-ratio: 16 / 9; background: #05080b; }
+video { position: absolute; width: 100%; height: 100%; inset: 0; object-fit: contain; background: #05080b; }
+.video-placeholder { position: absolute; z-index: 1; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 11px; padding: 18px; text-align: center; background: linear-gradient(145deg, #0d151d, #080c11); }
+.video-placeholder.hidden { display: none; }
+.video-placeholder strong { font-size: 14px; }
+.video-placeholder small { color: var(--muted); font-size: 11px; }
+.video-tag { position: absolute; z-index: 2; left: 17px; top: 16px; display: flex; align-items: center; gap: 7px; padding: 7px 9px; border-radius: 5px; color: white; background: #080d12d9; font-size: 10px; font-weight: 800; letter-spacing: .09em; }
+.video-tag .dot { width: 6px; height: 6px; }
+.video-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding: 17px 20px; }
+.video-meta > div { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.meta-label { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .1em; }
+.video-meta strong { overflow: hidden; color: #e8eef3; font-size: 12px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+footer { justify-content: space-between; gap: 15px; padding: 16px 2px 0; color: var(--muted); font-size: 11px; }
+.secure-note { color: #b4c4cf; white-space: nowrap; }
+.secure-note span { margin-right: 5px; color: var(--green); font-size: 9px; }
+.radar { position: relative; width: 45px; height: 45px; display: grid; place-items: center; }
+.radar span { position: absolute; border: 1px solid #4ca78390; border-radius: 50%; animation: pulse 2.3s ease-out infinite; }
+.radar span:nth-child(1) { width: 12px; height: 12px; background: #57d9a3; }
+.radar span:nth-child(2) { width: 27px; height: 27px; animation-delay: .5s; }
+.radar span:nth-child(3) { width: 43px; height: 43px; animation-delay: 1s; }
+@keyframes pulse { 0% { transform: scale(.65); opacity: .1; } 35% { opacity: .75; } 100% { transform: scale(1.12); opacity: 0; } }
+dialog { width: min(420px, calc(100% - 32px)); padding: 0; border: 1px solid #344556; border-radius: 18px; color: #f4f7fa; background: #141d27; box-shadow: 0 24px 90px #000a; }
+dialog::backdrop { background: #04080dc9; backdrop-filter: blur(5px); }
+dialog form { display: flex; flex-direction: column; padding: 29px; }
+.dialog-icon { display: grid; place-items: center; width: 42px; height: 42px; margin-bottom: 19px; border-radius: 12px; color: var(--green); background: #10251f; font-size: 22px; }
+h2 { margin: 0; font-size: 23px; letter-spacing: -.03em; }
+.dialog-copy { margin: 8px 0 22px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+label { margin-bottom: 7px; color: #c7d2da; font-size: 11px; font-weight: 700; }
+input { width: 100%; height: 46px; padding: 0 13px; border: 1px solid #3a4b5c; border-radius: 8px; color: white; background: #0d141b; font: inherit; }
+input:focus { outline: 2px solid #57d9a366; border-color: var(--green); }
+button { height: 46px; margin: 14px 0 12px; border: 0; border-radius: 8px; color: #092016; background: var(--green); font: inherit; font-size: 12px; font-weight: 850; letter-spacing: .04em; cursor: pointer; }
+button:hover { background: #77e6b7; }
+dialog small { color: var(--muted); font-size: 10px; text-align: center; }
+.error { min-height: 15px; margin: 7px 0 0; color: #ff8585; font-size: 11px; }
+@media (max-width: 600px) {
+  .shell { width: calc(100% - 26px); padding-top: 17px; }
+  .intro { padding: 29px 1px 16px; }
+  .subhead { font-size: 12px; }
+  .viewer-count { gap: 5px; font-size: 10px; }
+  .video-card { border-radius: 12px; }
+  .video-meta { grid-template-columns: repeat(2, 1fr); padding: 14px; gap: 15px 8px; }
+  footer { align-items: flex-start; flex-direction: column; font-size: 10px; }
+}

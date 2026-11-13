@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Garuda Live</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/viewer.css">
+  <script src="/viewer.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Garuda Live home">
+        <span class="brand-mark" aria-hidden="true">G</span>
+        <span><strong>GARUDA</strong><small>LIVE STREAM</small></span>
+      </a>
+      <div id="live-pill" class="pill waiting"><span class="dot"></span><span id="live-state">CONNECTING</span></div>
+    </header>
+
+    <section class="intro">
+      <div>
+        <p class="eyebrow">G12 · DRONE CAMERA</p>
+        <h1>Garuda Live</h1>
+        <p class="subhead">Secure, low-latency live video</p>
+      </div>
+      <div class="viewer-count"><span class="count-icon" aria-hidden="true">◉</span><span id="viewer-count">0</span><span>viewing</span></div>
+    </section>
+
+    <section class="video-card" aria-label="Live drone video">
+      <div class="video-wrap">
+        <video id="video" autoplay playsinline controls muted></video>
+        <div id="video-placeholder" class="video-placeholder">
+          <div class="radar"><span></span><span></span><span></span></div>
+          <strong id="viewer-message">Waiting for the G12 transmitter…</strong>
+          <small>WebRTC · end-to-end encrypted media</small>
+        </div>
+        <div id="video-tag" class="video-tag" hidden><span class="dot"></span> LIVE</div>
+      </div>
+      <div class="video-meta">
+        <div><span class="meta-label">RESOLUTION</span><strong id="resolution">—</strong></div>
+        <div><span class="meta-label">CONNECTION</span><strong id="connection">WebRTC · waiting</strong></div>
+        <div><span class="meta-label">ROUND TRIP</span><strong id="rtt">—</strong></div>
+        <div><span class="meta-label">PACKET LOSS</span><strong id="packet-loss">—</strong></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Video is transmitted directly from the G12 when network conditions allow.</span>
+      <span class="secure-note"><span aria-hidden="true">◆</span> DTLS-SRTP encrypted</span>
+    </footer>
+  </main>
+
+  <dialog id="pin-dialog" aria-labelledby="pin-title">
+    <form id="pin-form" method="dialog">
+      <div class="dialog-icon" aria-hidden="true">⌑</div>
+      <p class="eyebrow">PROTECTED LIVE SESSION</p>
+      <h2 id="pin-title">Enter viewer PIN</h2>
+      <p class="dialog-copy">The transmitter owner shared a PIN for this video.</p>
+      <label for="pin">Viewer PIN</label>
+      <input id="pin" name="pin" type="password" inputmode="text" autocomplete="one-time-code" minlength="4" maxlength="12" required>
+      <p id="pin-error" class="error" role="alert"></p>
+      <button type="submit">VIEW LIVE VIDEO</button>
+      <small>Your PIN is only used to authorize this session.</small>
+    </form>
+  </dialog>
+</body>
+</html>

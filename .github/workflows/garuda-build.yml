@@ -1,0 +1,98 @@
+name: Garuda GCS Android first
+on:
+  workflow_dispatch:
+    inputs:
+      build_windows:
+        description: Also build Windows after Android succeeds
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  android:
+    runs-on: ubuntu-24.04
+    env:
+      QT_VERSION: 6.8.3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: ./.github/actions/common
+      - uses: ./.github/actions/qt-android
+        with:
+          host: linux
+          arch: linux_gcc_64
+          version: 6.8.3
+          abis: arm64-v8a
+          cpm-modules: ${{ runner.temp }}/shadow_build_dir/cpm_modules
+      - name: Configure Garuda GCS
+        shell: bash
+        run: |
+          "$QT_ROOT_DIR/bin/qt-cmake" -S "$GITHUB_WORKSPACE" -B "$RUNNER_TEMP/shadow_build_dir" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release -DQGC_STABLE_BUILD=ON \
+            -DQT_ANDROID_ABIS=arm64-v8a -DQT_ANDROID_BUILD_ALL_ABIS=OFF \
+            -DQT_HOST_PATH="$QT_ROOT_DIR/../gcc_64" -DQT_ANDROID_SIGN_APK=OFF
+      - name: Build Android
+        run: cmake --build "$RUNNER_TEMP/shadow_build_dir" --parallel 2
+      - name: Sign internal-test APK
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          apk=$(find "$RUNNER_TEMP/shadow_build_dir/android-build" -type f -name '*.apk' | head -n 1)
+          test -n "$apk"
+          keytool -genkeypair -keystore "$RUNNER_TEMP/garuda-test.keystore" -storepass android \
+            -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 365 \
+            -dname 'CN=Garuda GCS Internal Test,O=Garuda Aerospace,C=IN'
+          "$ANDROID_SDK_ROOT/build-tools/35.0.0/zipalign" -f -p 4 "$apk" "$RUNNER_TEMP/aligned.apk"
+          "$ANDROID_SDK_ROOT/build-tools/35.0.0/apksigner" sign \
+            --ks "$RUNNER_TEMP/garuda-test.keystore" --ks-pass pass:android \
+            --key-pass pass:android --ks-key-alias androiddebugkey \
+            --out artifacts/Garuda-GCS-Android-arm64-TEST.apk "$RUNNER_TEMP/aligned.apk"
+          "$ANDROID_SDK_ROOT/build-tools/35.0.0/apksigner" verify --verbose artifacts/*.apk
+          "$ANDROID_SDK_ROOT/build-tools/35.0.0/aapt" dump badging artifacts/*.apk | head -n 6
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Garuda-GCS-Android-arm64-TEST
+          path: artifacts/*.apk
+          if-no-files-found: error
+  windows:
+    if: ${{ inputs.build_windows }}
+    needs: android
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: ./.github/actions/common
+      - uses: blinemedical/setup-gstreamer@v1
+        with:
+          version: 1.22.12
+      - name: Install NSIS
+        run: choco install nsis -y
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.8.3
+          host: windows
+          target: desktop
+          arch: win64_msvc2022_64
+          modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
+          cache: true
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+      - name: Configure and build Windows
+        shell: pwsh
+        run: |
+          & "$env:QT_ROOT_DIR/bin/qt-cmake.bat" -S "$env:GITHUB_WORKSPACE" -B "$env:RUNNER_TEMP/shadow_build_dir" -G Ninja -DCMAKE_BUILD_TYPE=Release -DQGC_STABLE_BUILD=ON
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          cmake --build "$env:RUNNER_TEMP/shadow_build_dir" --parallel 2
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          cmake --install "$env:RUNNER_TEMP/shadow_build_dir" --config Release
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Garuda-GCS-Windows-installer
+          path: ${{ runner.temp }}/shadow_build_dir/GarudaGCS-installer.exe
+          if-no-files-found: error

@@ -1,0 +1,9 @@
+Garuda Control Room uses the following third-party media components:
+
+LibVLCSharp.WPF 3.10.1 and VideoLAN.LibVLC.Windows 3.0.24
+Copyright VideoLAN and LibVLCSharp contributors.
+The NuGet packages declare LGPL-2.1-or-later licensing. See the upstream license and copyright notices at:
+https://code.videolan.org/videolan/LibVLCSharp
+https://code.videolan.org/videolan/vlc
+
+The release is published with VLC native DLLs and plugin files as separate files. Keep applicable upstream license texts and notices with redistributions, and review the packages' full terms and notices before commercial distribution.

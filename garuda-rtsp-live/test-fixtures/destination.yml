@@ -1,0 +1,26 @@
+logLevel: info
+rtspAddress: 127.0.0.1:18555
+rtspTransports: [tcp]
+rtspAuthMethods: [digest]
+rtmpAddress: 127.0.0.1:19350
+hls: no
+webrtc: no
+srt: no
+moq: no
+authInternalUsers:
+  - user: any
+    permissions:
+      - action: publish
+        path: "~^live/.*"
+      - action: read
+        path: "~^live/.*"
+  - user: fixture
+    pass: fixture-password
+    permissions:
+      - action: read
+        path: secure-camera
+paths:
+  secure-camera:
+    source: rtsp://127.0.0.1:18554/source1
+    sourceOnDemand: true
+  all_others:

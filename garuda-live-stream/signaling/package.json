@@ -1,0 +1,10 @@
+{
+  "name": "garuda-live-signaling",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Self-hosted WebRTC rendezvous service for Garuda Live Stream",
+  "license": "MIT",
+  "scripts": { "start": "node server.js", "test": "node --test" },
+  "dependencies": { "ws": "^8.18.0" },
+  "engines": { "node": ">=20" }
+}
