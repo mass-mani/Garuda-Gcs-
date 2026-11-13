@@ -51,7 +51,7 @@ jobs:
             --out artifacts/Garuda-GCS-Android-arm64-TEST.apk "$RUNNER_TEMP/aligned.apk"
           "$ANDROID_SDK_ROOT/build-tools/35.0.0/apksigner" verify --verbose artifacts/*.apk
           "$ANDROID_SDK_ROOT/build-tools/35.0.0/aapt" dump badging artifacts/*.apk | head -n 6
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: Garuda-GCS-Android-arm64-TEST
           path: artifacts/*.apk
@@ -91,7 +91,7 @@ jobs:
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           cmake --install "$env:RUNNER_TEMP/shadow_build_dir" --config Release
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: Garuda-GCS-Windows-installer
           path: ${{ runner.temp }}/shadow_build_dir/GarudaGCS-installer.exe
